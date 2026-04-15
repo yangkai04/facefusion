@@ -74,8 +74,8 @@ python facefusion.py run
 
 # 命令行无界面（GPU）
 python facefusion.py headless-run \
-  --execution-providers cuda \
+  --execution-providers cpu \
   --source-paths source.jpg \
-  --target-path target.mp4 \
-  --output-path output.mp4
+  --target-path target.jpg \
+  --output-path output/output.jpg
 ```
