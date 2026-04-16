@@ -102,3 +102,46 @@ process_frame(inputs) → (modified_frame, mask)
 ## 总结
 
 FaceFusion 的设计核心是**"处理器插件链 + 集中状态管理 + ONNX 推理池"**。用户选择处理器组合，系统自动串联执行，每帧图像依次经过人脸检测、特征提取、AI 变换、掩码融合，最终输出结果。视频则通过 FFmpeg 拆帧/合帧 + 多线程并行处理来保证效率。
+
+---
+
+## NSFW 内容检测（黄色内容过滤）
+
+### 核心文件
+
+**`facefusion/content_analyser.py`**
+
+---
+
+### 检测机制
+
+采用**3个模型投票**，至少2个模型同时判定为NSFW才会触发：
+
+| 模型 | 来源 | 阈值 |
+|------|------|------|
+| `nsfw_1` | EraX (Apache-2.0) | 0.2 |
+| `nsfw_2` | Marqo (Apache-2.0) | 0.25 |
+| `nsfw_3` | Freepik (MIT) | 10.5 |
+
+---
+
+### 关键函数
+
+| 函数 | 作用 |
+|------|------|
+| `detect_nsfw()` | 主检测入口，投票判定 |
+| `analyse_image()` | 检测图片 |
+| `analyse_video()` | 检测视频（>10% 的帧为 NSFW 则触发） |
+| `analyse_stream()` | 检测流（每秒采样一帧） |
+| `analyse_frame()` | 检测单帧 |
+
+---
+
+### 触发后的行为
+
+检测到 NSFW 内容时返回**错误码 3**，中止处理流程。集成在以下位置：
+
+- `workflows/image_to_image.py` — 图片处理前检查
+- `workflows/image_to_video.py` — 视频处理前检查
+- `uis/components/preview.py` — 预览时实时检测
+- `core.py` — 全局预检查
