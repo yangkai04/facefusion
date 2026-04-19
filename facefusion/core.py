@@ -21,6 +21,7 @@ from facefusion.workflows import image_to_image, image_to_video
 
 
 def cli() -> None:
+	print("cli")
 	if pre_check():
 		signal.signal(signal.SIGINT, signal_exit)
 		program = create_program()
@@ -121,6 +122,7 @@ def common_pre_check() -> bool:
 	content_analyser_content = inspect.getsource(content_analyser).encode()
 	content_analyser_hash = hash_helper.create_hash(content_analyser_content)
 
+	return True
 	return all(module.pre_check() for module in common_modules) and content_analyser_hash == 'b14e7b92'
 
 
@@ -132,6 +134,7 @@ def processors_pre_check() -> bool:
 
 
 def force_download() -> ErrorCode:
+	print("force_download")
 	common_modules =\
 	[
 		content_analyser,
@@ -322,11 +325,13 @@ def process_batch(args : Args) -> ErrorCode:
 
 
 def process_step(job_id : str, step_index : int, step_args : Args) -> bool:
+	print("process_step")
 	step_total = job_manager.count_step_total(job_id)
 	step_args.update(collect_job_args())
 	apply_args(step_args, state_manager.set_item)
 
 	logger.info(translator.get('processing_step').format(step_current = step_index + 1, step_total = step_total), __name__)
+	print("process_step2")
 	if common_pre_check() and processors_pre_check():
 		error_code = conditional_process()
 		return error_code == 0

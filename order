@@ -1,0 +1,4 @@
+python facefusion.py headless-run --execution-providers cpu --source-paths jiao1.png  --target-path input/pics/035.jpg  --output-path output/output.jpg
+
+
+  #--target-path input/pics/035.jpg \

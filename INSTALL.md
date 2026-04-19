@@ -20,7 +20,7 @@ conda activate facefusion
 
 ```bash
 cd /path/to/facefusion
-pip install -r requirements.txt
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 ---
@@ -40,8 +40,8 @@ conda install -c conda-forge ffmpeg curl -y
 默认安装的 `onnxruntime` 为 CPU 版，替换为 GPU 版：
 
 ```bash
-pip uninstall onnxruntime -y
-pip install onnxruntime-gpu==1.24.3
+pip uninstall onnxruntime -y 
+pip install onnxruntime-gpu==1.24.3 -i https://pypi.tuna.tsinghua.edu.cn/simple 
 ```
 
 ---

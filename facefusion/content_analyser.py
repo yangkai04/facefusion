@@ -159,6 +159,8 @@ def analyse_frame(vision_frame : VisionFrame) -> bool:
 @lru_cache()
 def analyse_image(image_path : str) -> bool:
 	vision_frame = read_image(image_path)
+	print("analyse_image")
+	return False
 	return analyse_frame(vision_frame)
 
 

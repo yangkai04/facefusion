@@ -46,6 +46,7 @@ def setup() -> ErrorCode:
 
 
 def prepare_image() -> ErrorCode:
+	print("prepare_image")
 	output_image_resolution = scale_resolution(detect_image_resolution(state_manager.get_item('target_path')), state_manager.get_item('output_image_scale'))
 	temp_image_resolution = restrict_image_resolution(state_manager.get_item('target_path'), output_image_resolution)
 
